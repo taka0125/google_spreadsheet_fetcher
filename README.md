@@ -36,9 +36,9 @@ end
 user_id = 'sample'
 fetcher = GoogleSpreadsheetFetcher::Fetcher.new(credential_store_file, user_id, sheet_key)
 
-fetch_by_index(0)
-fetch_by_title('title')
-fetch_by_gid('gid')
+fetcher.fetch_by_index(0)
+fetcher.fetch_by_title('title')
+fetcher.fetch_by_gid('gid')
 ```
 
 ## Development
