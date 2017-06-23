@@ -23,6 +23,7 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = '>= 2.3.0'
 
   spec.add_dependency 'google-api-client', '~> 0.9'
+  spec.add_dependency 'google_drive', '~> 2.1.3'
 
   spec.add_development_dependency "bundler", "~> 1.14"
   spec.add_development_dependency "rake", "~> 10.0"
