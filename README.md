@@ -1,8 +1,6 @@
 # GoogleSpreadsheetFetcher
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/google_spreadsheet_fetcher`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Use OAuth 2 authentication to retrieve data from Google Spreadsheet.
 
 ## Installation
 
@@ -22,7 +20,26 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+- Make project. https://cloud.google.com/resource-manager/docs/creating-managing-projects
+- Enable Google Drive API
+- Make OAuth 2.0 Client. (other)
+- Download client secret json
+
+```ruby
+credential_store_file = Rails.root.join('config', 'credential-oauth2-supporter.json').to_s
+sheet_key = 'YOUR_SHEET_KEY'
+
+GoogleSpreadsheetFetcher.configure do |config|
+  config.client_secrets_file_path = Rails.root.join('config', 'client_secrets_pokota_supporter.json').to_s
+end
+
+user_id = 'sample'
+fetcher = GoogleSpreadsheetFetcher::Fetcher.new(credential_store_file, user_id, sheet_key)
+
+fetch_by_index(0)
+fetch_by_title('title')
+fetch_by_gid('gid')
+```
 
 ## Development
 
