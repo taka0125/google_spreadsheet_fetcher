@@ -1,6 +1,6 @@
+require 'google/apis/sheets_v4'
 require 'googleauth'
 require 'googleauth/stores/file_token_store'
-require "google/apis/sheets_v4"
 require 'shellwords'
 
 module GoogleSpreadsheetFetcher
@@ -18,27 +18,9 @@ module GoogleSpreadsheetFetcher
       @application_name = application_name
     end
 
-    # @param [String] range(https://developers.google.com/sheets/api/guides/concepts#a1_notation)
-    # @param [Integer] skip
-    def fetch_all_rows(range, skip: 0, structured: false)
-      rows = service.batch_get_spreadsheet_values(@spreadsheet_id, ranges: [range])&.value_ranges&.first&.values
-      return [] if rows.blank?
-
-      if structured
-        headers = rows.delete_at(0)
-        rows.slice!(0, skip)
-        rows.map { |r| headers.zip(r).to_h }
-      else
-        rows.slice!(0, skip)
-        rows
-      end
-    end
-
     def fetch_all_rows_by!(index: nil, sheet_id: nil, title: nil, skip: 0, structured: false)
       sheet = fetch_sheet_by!(index: index, sheet_id: sheet_id, title: title)
-
-      range = "#{sheet.properties.title}!A:Z"
-      fetch_all_rows(range, skip: skip, structured: structured)
+      fetch_all_rows(sheet, skip: skip, structured: structured)
     end
 
     def service
@@ -50,13 +32,41 @@ module GoogleSpreadsheetFetcher
 
     private
 
+    # @param [Google::Apis::SheetsV4::Sheet] sheet
+    # @param [Integer] skip
+    # @param [Boolean] structured
+    def fetch_all_rows(sheet, skip: 0, structured: false)
+      # https://developers.google.com/sheets/api/guides/concepts#a1_notation
+      range = "#{sheet.properties.title}!A:Z"
+      rows = service.get_spreadsheet_values(@spreadsheet_id, range)&.values
+      return [] if rows.blank?
+
+      headers = rows.first
+      count = headers.count
+
+      if structured
+        rows.delete_at(0)
+        rows.slice!(0, skip)
+        rows.map { |r| headers.zip(r).to_h }
+      else
+        rows.slice!(0, skip)
+        rows.map { |r| items = Array.new(count, ""); items[0..r.count - 1] = r; items }
+      end
+    end
+
     def fetch_sheet_by!(index: nil, sheet_id: nil, title: nil)
       sheets = spreadsheet.sheets
       raise SheetNotFound if sheets.blank?
 
-      return sheets[index] if index.present?
-      return sheets.find { |s| s.properties.sheet_id == sheet_id } if sheet_id.present?
-      return sheets.find { |s| s.properties.title == title } if title.present?
+      sheet = if index.present?
+                sheets[index]
+              elsif sheet_id.present?
+                sheets.find { |s| s.properties.sheet_id == sheet_id }
+              elsif title.present?
+                sheets.find { |s| s.properties.title == title }
+              end
+
+      return sheet if sheet.present?
 
       raise SheetNotFound
     end
