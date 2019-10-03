@@ -27,7 +27,7 @@ module GoogleSpreadsheetFetcher
       if structured
         headers = rows.delete_at(0)
         rows.slice!(0, skip)
-        rows.map { |r| [headers, r].transpose.to_h }
+        rows.map { |r| headers.zip(r).to_h }
       else
         rows.slice!(0, skip)
         rows
