@@ -20,19 +20,25 @@ module GoogleSpreadsheetFetcher
 
     # @param [String] range(https://developers.google.com/sheets/api/guides/concepts#a1_notation)
     # @param [Integer] skip
-    def fetch_all_rows(range, skip: 0)
+    def fetch_all_rows(range, skip: 0, structured: false)
       rows = service.batch_get_spreadsheet_values(@spreadsheet_id, ranges: [range])&.value_ranges&.first&.values
       return [] if rows.blank?
 
-      rows.slice!(0, skip)
-      rows
+      if structured
+        headers = rows.delete_at(0)
+        rows.slice!(0, skip)
+        rows.map { |r| [headers, r].transpose.to_h }
+      else
+        rows.slice!(0, skip)
+        rows
+      end
     end
 
-    def fetch_all_rows_by!(index: nil, sheet_id: nil, title: nil, skip: 0)
+    def fetch_all_rows_by!(index: nil, sheet_id: nil, title: nil, skip: 0, structured: false)
       sheet = fetch_sheet_by!(index: index, sheet_id: sheet_id, title: title)
 
       range = "#{sheet.properties.title}!A:Z"
-      fetch_all_rows(range, skip: skip)
+      fetch_all_rows(range, skip: skip, structured: structured)
     end
 
     def service
