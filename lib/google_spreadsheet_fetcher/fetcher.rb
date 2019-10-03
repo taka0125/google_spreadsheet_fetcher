@@ -1,18 +1,18 @@
 require 'googleauth'
 require 'googleauth/stores/file_token_store'
-require 'google/apis/drive_v2'
-require 'google_drive'
+require "google/apis/sheets_v4"
 require 'shellwords'
 
 module GoogleSpreadsheetFetcher
   class Fetcher
     OOB_URI = 'urn:ietf:wg:oauth:2.0:oob'
 
-    def initialize(credential_store_file, user_id, sheet_key)
+    def initialize(credential_store_file, user_id, sheet_key, application_name: nil)
       @client_secret_file = GoogleSpreadsheetFetcher.config.client_secrets_file_path
       @credential_store_file = credential_store_file
       @user_id = user_id
       @sheet_key = sheet_key
+      @application_name = application_name
     end
 
     def fetch_by_index(index)
@@ -32,23 +32,15 @@ module GoogleSpreadsheetFetcher
     def fetch_worksheet_by(index: nil, title: nil, gid: nil)
       credentials = fetch_credentials
 
-      drive = Google::Apis::DriveV2::DriveService.new
-      drive.authorization = credentials
-      session = GoogleDrive::Session.login_with_oauth(credentials)
+      service = Google::Apis::SheetsV4::SheetsService.new
+      service.client_options.application_name = @application_name if @application_name
+      service.authorization = credentials
 
-      spreadsheet = session.spreadsheet_by_key(@sheet_key)
+      spreadsheet = service.get_spreadsheet(@sheet_key)
 
-      unless index.nil?
-        return spreadsheet.worksheets[index]
-      end
-
-      unless title.nil?
-        return spreadsheet.worksheet_by_title(title)
-      end
-
-      unless gid.nil?
-        return spreadsheet.worksheet_by_gid(gid)
-      end
+      return spreadsheet.worksheets[index] unless index.nil?
+      return spreadsheet.worksheet_by_title(title) unless title.nil?
+      return spreadsheet.worksheet_by_gid(gid) unless gid.nil?
 
       raise
     end
@@ -75,10 +67,8 @@ module GoogleSpreadsheetFetcher
     end
 
     def scopes
-      %w[
-        https://spreadsheets.google.com/feeds/
-        https://www.googleapis.com/auth/drive
-        https://www.googleapis.com/auth/userinfo.profile
+      [
+        Google::Apis::SheetsV4::AUTH_SPREADSHEETS_READONLY
       ]
     end
   end
