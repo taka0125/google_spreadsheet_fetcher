@@ -15,34 +15,64 @@ module GoogleSpreadsheetFetcher
       @application_name = application_name
     end
 
-    def fetch_by_index(index)
-      fetch_worksheet_by(index: index)
+    #
+    # Fetch all rows
+    #
+    # @param [String] ranges https://developers.google.com/sheets/api/guides/concepts#a1_notation
+    def fetch_all_rows(range, skip: 0)
+      rows = service.batch_get_spreadsheet_values(@sheet_key, ranges: [range])&.value_ranges&.first&.values
+      return if rows.empty?
+
+      rows.slice!(0, skip)
+      rows
     end
 
-    def fetch_by_title(title)
-      fetch_worksheet_by(title: title)
+    def fetch_all_rows_by_index(index, skip: 0)
+      sheet = sheet_by_index(index)
+      raise if sheet.nil?
+
+      range = "#{sheet.properties.title}!A:Z"
+      fetch_all_rows(range, skip: skip)
     end
 
-    def fetch_by_gid(gid)
-      fetch_worksheet_by(gid: gid)
+    def fetch_all_rows_by_gid(gid, skip: 0)
+      sheet = sheet_by_gid(gid)
+      raise if sheet.nil?
+
+      range = "#{sheet.properties.title}!A:Z"
+      fetch_all_rows(range, skip: skip)
+    end
+
+    def fetch_all_rows_by_title(title, skip: 0)
+      sheet = sheet_by_title(title)
+      raise if sheet.nil?
+
+      range = "#{sheet.properties.title}!A:Z"
+      fetch_all_rows(range, skip: skip)
+    end
+
+    def service
+      @service ||= begin
+        credentials = fetch_credentials
+
+        service = Google::Apis::SheetsV4::SheetsService.new
+        service.authorization = credentials
+        service
+      end
     end
 
     private
 
-    def fetch_worksheet_by(index: nil, title: nil, gid: nil)
-      credentials = fetch_credentials
+    def sheet_by_index(index)
+      service.get_spreadsheet(@sheet_key).sheets[index]
+    end
 
-      service = Google::Apis::SheetsV4::SheetsService.new
-      service.client_options.application_name = @application_name if @application_name
-      service.authorization = credentials
+    def sheet_by_gid(gid)
+      service.get_spreadsheet(@sheet_key).sheets.find { |s| s.properties.sheet_id == gid }
+    end
 
-      spreadsheet = service.get_spreadsheet(@sheet_key)
-
-      return spreadsheet.worksheets[index] unless index.nil?
-      return spreadsheet.worksheet_by_title(title) unless title.nil?
-      return spreadsheet.worksheet_by_gid(gid) unless gid.nil?
-
-      raise
+    def sheet_by_title(title)
+      service.get_spreadsheet(@sheet_key).sheets.find { |s| s.properties.title == title }
     end
 
     def fetch_credentials
