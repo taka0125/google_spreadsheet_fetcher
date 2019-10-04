@@ -1,3 +1,4 @@
+require "active_support/json"
 require "active_support/core_ext"
 require "google_spreadsheet_fetcher/version"
 require "google_spreadsheet_fetcher/config"
