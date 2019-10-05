@@ -51,8 +51,6 @@ module GoogleSpreadsheetFetcher
       else
         rows.slice!(0, skip)
         rows.map { |r| fill_array(r, count) }
-        # rows.map { |r| items = Array.new(count, ""); items[0..r.count - 1] = r; items }
-        #    def fill_array(items, count, fill: "")
       end
     end
 
@@ -94,10 +92,7 @@ module GoogleSpreadsheetFetcher
     end
 
     def fill_array(items, count, fill: "")
-      max_count = [count, items.count].max
-      results = Array.new(max_count, fill)
-      results[0..items.count - 1] = items
-      results
+      items + (count - items.count).times.map { fill }
     end
   end
 end
