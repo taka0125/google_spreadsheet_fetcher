@@ -37,7 +37,7 @@ module GoogleSpreadsheetFetcher
     # @param [Boolean] structured
     def fetch_all_rows(sheet, skip: 0, structured: false)
       # https://developers.google.com/sheets/api/guides/concepts#a1_notation
-      range = "#{sheet.properties.title}!A:Z"
+      range = "#{sheet.properties.title}!A:ZZ"
       rows = service.get_spreadsheet_values(@spreadsheet_id, range)&.values
       return [] if rows.blank?
 
