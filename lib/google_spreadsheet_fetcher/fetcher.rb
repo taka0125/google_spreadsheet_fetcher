@@ -88,7 +88,7 @@ module GoogleSpreadsheetFetcher
     end
 
     def spreadsheet
-      service.get_spreadsheet(@spreadsheet_id)
+      @spreadsheet ||= service.get_spreadsheet(@spreadsheet_id)
     end
 
     def fill_array(items, count, fill: "")
