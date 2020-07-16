@@ -25,20 +25,32 @@ Or install it yourself as:
 - Make OAuth 2.0 Client. (other)
 - Download client secret json
 
-```ruby
-credential_store_file = Rails.root.join('config', 'credential-oauth2-supporter.json').to_s
-sheet_key = 'YOUR_SHEET_KEY'
 
-GoogleSpreadsheetFetcher.configure do |config|
-  config.client_secrets_file_path = Rails.root.join('config', 'client_secrets_pokota_supporter.json').to_s
+```ruby
+sheet_key = 'example_sheet_id'
+
+GoogleSpreadsheetBulkFetcher.configure do |config|
+  config.client_secrets_file = 'client_secrets_file_path.json'
+  config.credential_store_file = 'credential_store_file_path.json'
 end
 
 user_id = 'sample'
+
 fetcher = GoogleSpreadsheetFetcher::Fetcher.new(credential_store_file, user_id, sheet_key)
 
-fetcher.fetch_by_index(0)
-fetcher.fetch_by_title('title')
-fetcher.fetch_by_gid('gid')
+fetcher.fetch_all_rows_by!(index: 0)
+fetcher.fetch_all_rows_by!(title: 'sheet_title')
+fetcher.fetch_all_rows_by!(sheet_id: 1234567890)
+
+
+# or, you can do a bulk fetching. In this case, you only need to access the API once,
+# but it will take a little longer on first fetch.
+fetcher = GoogleSpreadsheetFetcher::BulkFetcher.new(sheet_key, user_id)
+fetcher.fetch
+
+fetcher.all_rows_by!(index: 0)
+fetcher.all_rows_by!(title: 'sheet_title')
+fetcher.all_rows_by!(sheet_id: 1234567890)
 ```
 
 ## Development
