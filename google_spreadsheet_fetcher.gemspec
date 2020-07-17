@@ -6,8 +6,8 @@ require 'google_spreadsheet_fetcher/version'
 Gem::Specification.new do |spec|
   spec.name          = "google_spreadsheet_fetcher"
   spec.version       = GoogleSpreadsheetFetcher::VERSION
-  spec.authors       = ["Takahiro Ooishi"]
-  spec.email         = ["taka0125@gmail.com"]
+  spec.authors       = ["Takahiro Ooishi", "Yuya Yokosuka"]
+  spec.email         = ["taka0125@gmail.com", "yuya.yokosuka@gmail.com"]
 
   spec.summary       = %q{Google Spreadsheet fetcher}
   spec.description   = %q{Google Spreadsheet fetcher}
