@@ -25,7 +25,6 @@ module GoogleSpreadsheetFetcher
 
     private
 
-
     def fetch_credentials
       client_id = Google::Auth::ClientId.from_file(@config.client_secrets_file)
       token_store = Google::Auth::Stores::FileTokenStore.new(file: @config.credential_store_file)

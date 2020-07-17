@@ -29,14 +29,14 @@ Or install it yourself as:
 ```ruby
 sheet_key = 'example_sheet_id'
 
-GoogleSpreadsheetBulkFetcher.configure do |config|
+GoogleSpreadsheetFetcher.configure do |config|
   config.client_secrets_file = 'client_secrets_file_path.json'
   config.credential_store_file = 'credential_store_file_path.json'
 end
 
 user_id = 'sample'
 
-fetcher = GoogleSpreadsheetFetcher::Fetcher.new(credential_store_file, user_id, sheet_key)
+fetcher = GoogleSpreadsheetFetcher::Fetcher.new(sheet_key, user_id)
 
 fetcher.fetch_all_rows_by!(index: 0)
 fetcher.fetch_all_rows_by!(title: 'sheet_title')
