@@ -5,7 +5,8 @@ module GoogleSpreadsheetFetcher
     include ActiveSupport::Configurable
 
     config_accessor :client_secrets_file
-    config_accessor :credential_store_file
+    config_accessor :credential_store_file # required if token_store not set
+    config_accessor :token_store # required if credential_store_file not set
     config_accessor :scopes
 
     def self.default_config

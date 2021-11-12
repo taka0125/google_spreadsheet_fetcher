@@ -14,6 +14,7 @@ module GoogleSpreadsheetFetcher
       @user_id = user_id
       @config = config || GoogleSpreadsheetFetcher.config
       @application_name = application_name
+      @token_store = config.token_store || Google::Auth::Stores::FileTokenStore.new(file: @config.credential_store_file)
     end
 
     def build
@@ -27,8 +28,7 @@ module GoogleSpreadsheetFetcher
 
     def fetch_credentials
       client_id = Google::Auth::ClientId.from_file(@config.client_secrets_file)
-      token_store = Google::Auth::Stores::FileTokenStore.new(file: @config.credential_store_file)
-      authorizer = Google::Auth::UserAuthorizer.new(client_id, @config.scopes, token_store)
+      authorizer = Google::Auth::UserAuthorizer.new(client_id, @config.scopes, @token_store)
 
       credentials = authorizer.get_credentials(@user_id)
       return credentials if credentials.present?
