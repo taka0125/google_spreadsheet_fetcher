@@ -14,7 +14,7 @@ module GoogleSpreadsheetFetcher
       @user_id = user_id
       @config = config || GoogleSpreadsheetFetcher.config
       @application_name = application_name
-      @token_store = config.token_store || Google::Auth::Stores::FileTokenStore.new(file: @config.credential_store_file)
+      @token_store = @config.token_store || Google::Auth::Stores::FileTokenStore.new(file: @config.credential_store_file)
     end
 
     def build
