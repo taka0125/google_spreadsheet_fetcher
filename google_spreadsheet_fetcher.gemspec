@@ -12,6 +12,7 @@ Gem::Specification.new do |spec|
   spec.summary       = %q{Google Spreadsheet fetcher}
   spec.description   = %q{Google Spreadsheet fetcher}
   spec.homepage      = "https://github.com/taka0125/google_spreadsheet_fetcher"
+  spec.licenses      = ['MIT']
 
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
     f.match(%r{^(test|spec|features)/})
