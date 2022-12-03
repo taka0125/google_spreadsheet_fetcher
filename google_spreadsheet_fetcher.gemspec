@@ -23,7 +23,9 @@ Gem::Specification.new do |spec|
 
   spec.required_ruby_version = '>= 2.3.0'
 
+  spec.add_dependency 'rack', '< 3.0'
   spec.add_dependency 'google-api-client', '~> 0.9'
+  spec.add_dependency 'googleauth'
   spec.add_dependency 'activesupport'
 
   spec.add_development_dependency "bundler"
