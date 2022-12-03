@@ -1,6 +1,3 @@
-require 'google/apis/sheets_v4'
-require 'shellwords'
-
 module GoogleSpreadsheetFetcher
   class BulkFetcher
     # @param [String] spreadsheet_id

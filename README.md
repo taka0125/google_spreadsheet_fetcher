@@ -1,6 +1,6 @@
 # GoogleSpreadsheetFetcher
 
-Use OAuth 2 authentication to retrieve data from Google Spreadsheet.
+Provides access to Google spreadsheets
 
 ## Installation
 
@@ -20,18 +20,11 @@ Or install it yourself as:
 
 ## Usage
 
-- Make project. https://cloud.google.com/resource-manager/docs/creating-managing-projects
-- Enable Google Drive API
-- Make OAuth 2.0 Client. (other)
-- Download client secret json
-
-
 ```ruby
 sheet_key = 'example_sheet_id'
 
 GoogleSpreadsheetFetcher.configure do |config|
-  config.client_secrets_file = 'client_secrets_file_path.json'
-  config.credential_store_file = 'credential_store_file_path.json'
+  ...
 end
 
 user_id = 'sample'
@@ -52,6 +45,14 @@ fetcher.all_rows_by!(index: 0)
 fetcher.all_rows_by!(title: 'sheet_title')
 fetcher.all_rows_by!(sheet_id: 1234567890)
 ```
+
+### Use Service Account
+
+https://github.com/taka0125/google_spreadsheet_fetcher/wiki/Use-Service-Account
+
+### Use OAuth2
+
+https://github.com/taka0125/google_spreadsheet_fetcher/wiki/Use-OAuth2
 
 ## Development
 

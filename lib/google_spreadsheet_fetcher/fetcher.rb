@@ -1,10 +1,5 @@
-require 'google/apis/sheets_v4'
-require 'shellwords'
-
 module GoogleSpreadsheetFetcher
   class Fetcher
-    OOB_URI = 'urn:ietf:wg:oauth:2.0:oob'
-
     # @param [String] spreadsheet_id
     # @param [String] user_id
     # @param [GoogleSpreadsheetFetcher::Config] config
