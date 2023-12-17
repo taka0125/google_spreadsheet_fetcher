@@ -11,9 +11,14 @@ restart:
 	$(MAKE) up
 ps:
 	$(DOCKER_COMPOSE) ps
+convert:
+	$(DOCKER_COMPOSE) convert
 setup: up
 	$(DOCKER_COMPOSE) exec ruby bash -c 'bin/setup'
 ruby/bash:
 	$(DOCKER_COMPOSE) exec ruby bash
 ruby/rspec: up
 	$(DOCKER_COMPOSE) exec ruby bash -c 'bundle exec rspec'
+gem/release:
+	@read -p "Enter OTP code: " otp_code; \
+	gh workflow run release.yml -f rubygems-otp-code="$$otp_code"
