@@ -1,5 +1,8 @@
 DOCKER_COMPOSE = docker compose
 
+help:
+	@grep "^[a-zA-Z][a-zA-Z0-9\-\/\_]*:" -o Makefile | grep -v "grep" | sed -e 's/^/make /' | sed -e 's/://'
+
 build:
 	$(DOCKER_COMPOSE) build
 up:
