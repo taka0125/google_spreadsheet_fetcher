@@ -1,7 +1,4 @@
-# coding: utf-8
-lib = File.expand_path('../lib', __FILE__)
-$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'google_spreadsheet_fetcher/version'
+require_relative "lib/google_spreadsheet_fetcher/version"
 
 Gem::Specification.new do |spec|
   spec.name          = "google_spreadsheet_fetcher"
@@ -14,9 +11,12 @@ Gem::Specification.new do |spec|
   spec.homepage      = "https://github.com/taka0125/google_spreadsheet_fetcher"
   spec.licenses      = ['MIT']
 
-  spec.files         = Dir['LICENSE', 'README.md', 'lib/**/*', 'exe/**/*', 'sig/**/*']
+  spec.metadata["homepage_uri"] = spec.homepage
+  spec.metadata["source_code_uri"] = spec.homepage
+
+  spec.files         = Dir['lib/**/*', 'exe/**/*', 'sig/**/*']
   spec.bindir        = "exe"
-  spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
+  spec.executables   = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
   spec.required_ruby_version = '>= 3.1.0'

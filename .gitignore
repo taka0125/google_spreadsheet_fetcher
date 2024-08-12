@@ -12,3 +12,8 @@
 .rspec_status
 
 vendor/
+
+samples/oauth2/.bundle/
+samples/oauth2/Gemfile.lock
+samples/service_account/.bundle/
+samples/service_account/Gemfile.lock

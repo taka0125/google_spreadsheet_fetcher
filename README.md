@@ -1,5 +1,8 @@
 # GoogleSpreadsheetFetcher
 
+[![Build Status](https://github.com/taka0125/google_spreadsheet_fetcher/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/taka0125/google_spreadsheet_fetcher/actions/workflows/main.yml)
+[![Gem Version](https://badge.fury.io/rb/google_spreadsheet_fetcher.svg)](https://badge.fury.io/rb/google_spreadsheet_fetcher)
+
 Provides access to Google spreadsheets
 
 ## Installation

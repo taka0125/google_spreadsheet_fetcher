@@ -1,5 +1,3 @@
-version: '3'
-
 services:
   ruby:
     image: ruby:3.2
