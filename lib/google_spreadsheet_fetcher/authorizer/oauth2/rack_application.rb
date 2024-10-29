@@ -29,7 +29,7 @@ module GoogleSpreadsheetFetcher
             domain: 'localhost',
             path: '/',
             expire_after: 3600*24,
-            secret: secret || SecureRandom.uuid
+            secret: secret || SecureRandom.hex(64)
           }
         end
 
