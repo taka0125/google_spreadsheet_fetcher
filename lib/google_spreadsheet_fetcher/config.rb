@@ -1,16 +1,12 @@
-require 'active_support/configurable'
-
 module GoogleSpreadsheetFetcher
   class Config
-    include ActiveSupport::Configurable
+    class_attribute :authorizer
 
-    config_accessor :authorizer
-
-    config_accessor :client_secrets_file
-    config_accessor :credential_store_file # required if token_store not set
-    config_accessor :token_store # required if credential_store_file not set
-    config_accessor :scopes
-    config_accessor :user_id
+    class_attribute :client_secrets_file
+    class_attribute :credential_store_file # required if token_store not set
+    class_attribute :token_store # required if credential_store_file not set
+    class_attribute :scopes
+    class_attribute :user_id
 
     def self.default_config
       new.tap do |config|
